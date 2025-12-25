@@ -14,39 +14,13 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        
-        :root {
-            --brand-grad: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 50%, #701a75 100%);
-        }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #f8fafc;
-            overscroll-behavior-y: contain;
-        }
-
-        .app-card {
-            background: var(--brand-grad);
-            border-radius: 2.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-        }
-
-        .glass {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .input-field {
-            @apply w-full p-4 rounded-2xl bg-slate-100 border-none focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-sm transition-all;
-        }
-
-        .nav-btn { @apply flex flex-col items-center justify-center transition-all; }
+        :root { --brand-grad: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 50%, #701a75 100%); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; overscroll-behavior-y: contain; }
+        .app-card { background: var(--brand-grad); border-radius: 2.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); }
+        .glass { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .input-field { @apply w-full p-4 rounded-2xl bg-slate-100 border-none focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-sm transition-all; }
         .nav-active { @apply text-indigo-600 scale-110; }
         .nav-inactive { @apply text-slate-300; }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
 <body class="text-slate-900">
@@ -58,140 +32,103 @@
                     <i class="fas fa-graduation-cap text-white text-3xl"></i>
                 </div>
                 <h1 class="text-2xl font-extrabold tracking-tight text-slate-800">ZONE WAGOORA</h1>
-                <p class="text-indigo-600 font-bold text-xs tracking-widest uppercase">Learning Portal</p>
+                <p class="text-indigo-600 font-bold text-xs tracking-widest uppercase">Portal Access</p>
+            </div>
+
+            <div class="flex gap-2 mb-6 p-1 bg-slate-100 rounded-2xl">
+                <button onclick="setRole('student')" id="role-student" class="flex-1 py-3 rounded-xl font-bold text-xs transition-all bg-white shadow-sm text-indigo-600">STUDENT</button>
+                <button onclick="setRole('teacher')" id="role-teacher" class="flex-1 py-3 rounded-xl font-bold text-xs transition-all text-slate-400">TEACHER</button>
+            </div>
+
+            <div id="login-box" class="space-y-4">
+                <input type="email" id="login-email" placeholder="Email Address" class="input-field">
+                <input type="password" id="login-pass" placeholder="Password" class="input-field">
+                <button onclick="handleLogin()" class="w-full app-card text-white font-bold py-4 shadow-lg">Sign In</button>
+                <p class="text-center text-sm">New here? <span onclick="toggleView()" class="text-indigo-600 font-bold cursor-pointer">Register</span></p>
             </div>
 
             <div id="signup-box" class="hidden space-y-4">
                 <div class="flex flex-col items-center">
-                    <label for="reg-photo" class="relative group">
-                        <div id="photo-preview" class="w-24 h-24 rounded-full bg-slate-100 border-4 border-indigo-50 flex items-center justify-center overflow-hidden shadow-inner">
-                            <i class="fas fa-camera text-slate-300 text-2xl"></i>
-                        </div>
-                        <div class="absolute bottom-0 right-0 bg-indigo-600 text-white p-2 rounded-full text-xs shadow-lg">
-                            <i class="fas fa-plus"></i>
+                    <label for="reg-photo" id="photo-label" class="cursor-pointer">
+                        <div id="photo-preview" class="w-20 h-20 rounded-full bg-slate-100 border-4 border-indigo-50 flex items-center justify-center overflow-hidden">
+                            <i class="fas fa-camera text-slate-300"></i>
                         </div>
                     </label>
-                    <input type="file" id="reg-photo" accept="image/*" class="hidden" onchange="handlePreview(event)">
+                    <input type="file" id="reg-photo" class="hidden" onchange="handlePreview(event)">
                 </div>
-                
                 <input type="text" id="reg-name" placeholder="Full Name" class="input-field">
-                <input type="tel" id="reg-whatsapp" placeholder="WhatsApp Number" class="input-field">
-                <select id="reg-grade" class="input-field">
-                    <option value="">Select Class</option>
-                    <option value="1st">Class 1st</option><option value="2nd">Class 2nd</option><option value="3rd">Class 3rd</option>
-                    <option value="4th">Class 4th</option><option value="5th">Class 5th</option><option value="6th">Class 6th</option>
-                    <option value="7th">Class 7th</option><option value="8th">Class 8th</option>
-                </select>
-                <input type="email" id="reg-email" placeholder="Email Address" class="input-field">
+                <input type="tel" id="reg-whatsapp" placeholder="WhatsApp No" class="input-field">
+                <div id="grade-selector">
+                    <select id="reg-grade" class="input-field">
+                        <option value="1st">Class 1st</option><option value="2nd">Class 2nd</option><option value="3rd">Class 3rd</option>
+                        <option value="4th">Class 4th</option><option value="5th">Class 5th</option><option value="6th">Class 6th</option>
+                        <option value="7th">Class 7th</option><option value="8th">Class 8th</option>
+                    </select>
+                </div>
+                <input type="email" id="reg-email" placeholder="Email" class="input-field">
                 <input type="password" id="reg-pass" placeholder="Password" class="input-field">
-                <button onclick="handleSignup()" id="reg-btn" class="w-full app-card text-white font-bold py-4 shadow-lg active:scale-95 transition-all">Create Account</button>
-                <p class="text-center text-sm">Have an account? <span onclick="toggleView()" class="text-indigo-600 font-bold cursor-pointer">Login</span></p>
-            </div>
-
-            <div id="login-box" class="space-y-4">
-                <input type="email" id="login-email" placeholder="Email" class="input-field">
-                <input type="password" id="login-pass" placeholder="Password" class="input-field">
-                <button onclick="handleLogin()" class="w-full app-card text-white font-bold py-4 shadow-lg active:scale-95 transition-all">Sign In</button>
-                <p class="text-center text-sm">New student? <span onclick="toggleView()" class="text-indigo-600 font-bold cursor-pointer">Register</span></p>
+                <button onclick="handleSignup()" id="reg-btn" class="w-full app-card text-white font-bold py-4">Register</button>
+                <p class="text-center text-sm"><span onclick="toggleView()" class="text-indigo-600 font-bold cursor-pointer">Back to Login</span></p>
             </div>
         </div>
     </div>
 
     <div id="app-dashboard" class="hidden min-h-screen pb-24">
         <div class="p-6">
-            <div class="app-card p-8 text-white relative overflow-hidden">
-                <div class="flex justify-between items-start z-10 relative">
-                    <div>
-                        <p class="text-indigo-200 text-xs font-bold uppercase tracking-widest mb-1">Welcome Back,</p>
-                        <h2 id="u-name" class="text-3xl font-black">Scholar</h2>
-                        <div class="mt-4 glass rounded-2xl p-4 flex items-center gap-4">
-                            <div class="bg-yellow-400 text-yellow-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
-                                <i class="fas fa-coins"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] uppercase font-bold opacity-70">Total Coins</p>
-                                <p id="u-coins" class="text-xl font-black leading-none">0</p>
-                            </div>
-                        </div>
-                    </div>
-                    <img id="u-photo" src="" class="w-20 h-20 rounded-[1.5rem] object-cover border-4 border-white/20 shadow-2xl">
+            <div class="app-card p-6 text-white flex justify-between items-center">
+                <div>
+                    <h2 id="u-name" class="text-2xl font-black italic">Scholar</h2>
+                    <p id="u-role-tag" class="text-[10px] uppercase font-bold opacity-70 tracking-widest mt-1"></p>
+                </div>
+                <img id="u-photo" src="" class="w-14 h-14 rounded-2xl object-cover border-2 border-white/20">
+            </div>
+        </div>
+
+        <div id="teacher-panel" class="hidden px-6 space-y-6">
+            <h3 class="font-black text-slate-400 text-xs uppercase tracking-widest">Teacher Management</h3>
+            <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+                <p class="font-bold text-sm mb-4"><i class="fas fa-user-clock mr-2 text-indigo-600"></i> Pending Student Approvals</p>
+                <div id="pending-list" class="space-y-3">
+                    <p class="text-xs text-slate-400 italic">Checking for new students...</p>
                 </div>
             </div>
+            <button class="w-full p-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg"><i class="fas fa-plus-circle mr-2"></i> Upload New Question</button>
         </div>
 
-        <div class="px-6 space-y-6">
-            <div id="view-home" class="space-y-4">
-                <h3 class="font-black text-slate-400 text-xs uppercase tracking-widest">Active Lessons</h3>
-                <div id="subject-list" class="grid grid-cols-2 gap-4"></div>
-            </div>
-
-            <div id="view-leader" class="hidden space-y-4">
-                <h3 class="font-black text-slate-400 text-xs uppercase tracking-widest text-center">Zone Leaderboard</h3>
-                <div id="rank-list" class="space-y-3"></div>
-            </div>
+        <div id="student-panel" class="hidden px-6 space-y-6">
+            <div class="grid grid-cols-2 gap-4" id="subject-list"></div>
         </div>
 
-        <nav class="fixed bottom-6 left-6 right-6 h-20 bg-white shadow-2xl rounded-[2rem] flex justify-around items-center px-4 border border-slate-100">
-            <button onclick="switchTab('home')" id="n-home" class="nav-btn nav-active"><i class="fas fa-th-large text-xl"></i><span class="text-[10px] font-bold mt-1">Study</span></button>
-            <button onclick="switchTab('leader')" id="n-leader" class="nav-btn nav-inactive"><i class="fas fa-trophy text-xl"></i><span class="text-[10px] font-bold mt-1">Ranks</span></button>
-            <button onclick="logout()" class="nav-btn text-red-400"><i class="fas fa-power-off text-xl"></i><span class="text-[10px] font-bold mt-1">Exit</span></button>
+        <nav class="fixed bottom-6 left-6 right-6 h-20 bg-white shadow-2xl rounded-[2rem] flex justify-around items-center px-4">
+            <button onclick="switchTab('home')" class="flex flex-col items-center nav-active"><i class="fas fa-home text-xl"></i><span class="text-[10px] font-bold mt-1">Home</span></button>
+            <button onclick="switchTab('leader')" class="flex flex-col items-center nav-inactive"><i class="fas fa-trophy text-xl"></i><span class="text-[10px] font-bold mt-1">Ranks</span></button>
+            <button onclick="logout()" class="flex flex-col items-center text-red-400"><i class="fas fa-sign-out-alt text-xl"></i><span class="text-[10px] font-bold mt-1">Exit</span></button>
         </nav>
     </div>
 
     <script>
+        // Use your Firebase Config here
         const firebaseConfig = {
             apiKey: "AIzaSyCBLLmzxVYuivT15HBPPSxMoS2OzojRgJM",
             authDomain: "wap-ps-pethgam.firebaseapp.com",
-            databaseURL: "https://wap-ps-pethgam-default-rtdb.firebaseio.com",
             projectId: "wap-ps-pethgam",
             storageBucket: "wap-ps-pethgam.firebasestorage.app",
             messagingSenderId: "430925411362",
             appId: "1:430925411362:web:22857dee585d02fc54467b"
         };
-
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         const storage = firebase.storage();
+
+        let currentRole = 'student';
         let userProfile = null;
 
-        function handlePreview(e) {
-            const file = e.target.files[0];
-            if(file) document.getElementById('photo-preview').innerHTML = `<img src="${URL.createObjectURL(file)}" class="w-full h-full object-cover">`;
-        }
-
-        async function handleSignup() {
-            const btn = document.getElementById('reg-btn');
-            const file = document.getElementById('reg-photo').files[0];
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
-            const pass = document.getElementById('reg-pass').value;
-
-            if(!file || !name) return alert("Photo and Name are required!");
-
-            btn.disabled = true; btn.innerText = "Creating Account...";
-
-            try {
-                const cred = await auth.createUserWithEmailAndPassword(email, pass);
-                const ref = storage.ref(`users/${cred.user.uid}`);
-                await ref.put(file);
-                const url = await ref.getDownloadURL();
-
-                await db.collection("users").doc(cred.user.uid).set({
-                    uid: cred.user.uid,
-                    fullName: name,
-                    whatsapp: document.getElementById('reg-whatsapp').value,
-                    grade: document.getElementById('reg-grade').value,
-                    photo: url,
-                    coins: 0,
-                    completed: [],
-                    approved: false,
-                    role: 'student'
-                });
-
-                alert("Account Ready! Awaiting Teacher Approval.");
-                location.reload();
-            } catch (e) { alert(e.message); btn.disabled = false; btn.innerText = "Create Account"; }
+        function setRole(role) {
+            currentRole = role;
+            document.getElementById('role-student').className = role === 'student' ? 'flex-1 py-3 rounded-xl font-bold text-xs bg-white shadow-sm text-indigo-600' : 'flex-1 py-3 rounded-xl font-bold text-xs text-slate-400';
+            document.getElementById('role-teacher').className = role === 'teacher' ? 'flex-1 py-3 rounded-xl font-bold text-xs bg-white shadow-sm text-indigo-600' : 'flex-1 py-3 rounded-xl font-bold text-xs text-slate-400';
+            document.getElementById('grade-selector').style.display = role === 'teacher' ? 'none' : 'block';
         }
 
         async function handleLogin() {
@@ -201,62 +138,90 @@
                 const cred = await auth.signInWithEmailAndPassword(email, pass);
                 const doc = await db.collection("users").doc(cred.user.uid).get();
                 userProfile = doc.data();
-                if(!userProfile.approved) { alert("Admin Approval Pending."); auth.signOut(); return; }
-                initApp();
+                
+                if(userProfile.role !== currentRole) { alert(`This account is registered as a ${userProfile.role}.`); auth.signOut(); return; }
+                if(userProfile.role === 'student' && !userProfile.approved) { alert("Your account is pending teacher approval."); auth.signOut(); return; }
+                
+                showDashboard();
             } catch (e) { alert(e.message); }
         }
 
-        function initApp() {
+        async function handleSignup() {
+            const btn = document.getElementById('reg-btn');
+            const file = document.getElementById('reg-photo').files[0];
+            const name = document.getElementById('reg-name').value;
+            btn.disabled = true;
+
+            try {
+                const cred = await auth.createUserWithEmailAndPassword(document.getElementById('reg-email').value, document.getElementById('reg-pass').value);
+                let photoURL = "https://ui-avatars.com/api/?name=" + name;
+                
+                if(file) {
+                    const ref = storage.ref(`users/${cred.user.uid}`);
+                    await ref.put(file);
+                    photoURL = await ref.getDownloadURL();
+                }
+
+                await db.collection("users").doc(cred.user.uid).set({
+                    uid: cred.user.uid, fullName: name, whatsapp: document.getElementById('reg-whatsapp').value,
+                    grade: currentRole === 'teacher' ? 'Staff' : document.getElementById('reg-grade').value,
+                    photo: photoURL, role: currentRole, coins: 0, approved: currentRole === 'teacher' ? true : false, completed: []
+                });
+
+                alert(currentRole === 'teacher' ? "Teacher Account Created!" : "Registered! Wait for Teacher Approval.");
+                location.reload();
+            } catch (e) { alert(e.message); btn.disabled = false; }
+        }
+
+        function showDashboard() {
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('app-dashboard').classList.remove('hidden');
-            document.getElementById('u-name').innerText = userProfile.fullName.split(' ')[0];
-            document.getElementById('u-coins').innerText = userProfile.coins;
+            document.getElementById('u-name').innerText = userProfile.fullName;
+            document.getElementById('u-role-tag').innerText = userProfile.role === 'teacher' ? "Teaching Faculty" : "Class " + userProfile.grade;
             document.getElementById('u-photo').src = userProfile.photo;
-            renderSubjects();
+
+            if(userProfile.role === 'teacher') {
+                document.getElementById('teacher-panel').classList.remove('hidden');
+                loadPendingStudents();
+            } else {
+                document.getElementById('student-panel').classList.remove('hidden');
+                renderSubjects();
+            }
         }
 
-        function renderSubjects() {
-            const subs = ["English", "Math", "Science", "Urdu", "Kashmiri", "EVS", "S.St"];
-            const grid = document.getElementById('subject-list');
-            grid.innerHTML = subs.map(s => `
-                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col items-center">
-                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-3"><i class="fas fa-book"></i></div>
-                    <span class="font-bold text-xs">${s}</span>
-                </div>
-            `).join('');
-        }
-
-        async function fetchRanks() {
-            const list = document.getElementById('rank-list');
-            list.innerHTML = "Fetching...";
-            const snap = await db.collection("users").where("role","==","student").orderBy("coins","desc").limit(10).get();
+        async function loadPendingStudents() {
+            const list = document.getElementById('pending-list');
+            const snap = await db.collection("users").where("role","==","student").where("approved","==",false).get();
+            if(snap.empty) { list.innerHTML = "<p class='text-xs text-green-500 font-bold'>All students approved! ✅</p>"; return; }
+            
             list.innerHTML = "";
-            snap.forEach((doc, i) => {
-                const u = doc.data();
+            snap.forEach(doc => {
+                const s = doc.data();
                 list.innerHTML += `
-                    <div class="flex items-center justify-between p-4 bg-white rounded-3xl border border-slate-50">
-                        <div class="flex items-center gap-4">
-                            <span class="font-black text-slate-300 w-4">${i+1}</span>
-                            <img src="${u.photo}" class="w-12 h-12 rounded-2xl object-cover shadow-md">
-                            <div>
-                                <p class="font-bold text-sm text-slate-800">${u.fullName}</p>
-                                <p class="text-[10px] text-indigo-500 font-bold uppercase">${u.grade}</p>
-                            </div>
+                    <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <img src="${s.photo}" class="w-10 h-10 rounded-lg object-cover">
+                            <div><p class="text-xs font-bold">${s.fullName}</p><p class="text-[8px] uppercase opacity-50">${s.grade} | ${s.whatsapp}</p></div>
                         </div>
-                        <div class="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-2xl font-black text-sm">${u.coins}</div>
-                    </div>
-                `;
+                        <button onclick="approveStudent('${s.uid}')" class="bg-indigo-600 text-white text-[10px] font-bold px-3 py-2 rounded-lg">APPROVE</button>
+                    </div>`;
             });
         }
 
-        function switchTab(t) {
-            ['home', 'leader'].forEach(v => document.getElementById('view-'+v).classList.add('hidden'));
-            ['n-home', 'n-leader'].forEach(n => document.getElementById(n).classList.replace('nav-active', 'nav-inactive'));
-            document.getElementById('view-'+t).classList.remove('hidden');
-            document.getElementById('n-'+t).classList.replace('nav-inactive', 'nav-active');
-            if(t === 'leader') fetchRanks();
+        async function approveStudent(uid) {
+            await db.collection("users").doc(uid).update({ approved: true });
+            alert("Student Approved!"); loadPendingStudents();
         }
 
+        function renderSubjects() {
+            const grid = document.getElementById('subject-list');
+            const subs = ["English", "Mathematics", "Science", "Urdu"];
+            grid.innerHTML = subs.map(s => `<div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 flex flex-col items-center">
+                <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mb-2"><i class="fas fa-book"></i></div>
+                <p class="font-bold text-xs">${s}</p></div>`).join('');
+        }
+
+        function handlePreview(e) { document.getElementById('photo-preview').innerHTML = `<img src="${URL.createObjectURL(e.target.files[0])}" class="w-full h-full object-cover">`; }
         function toggleView() { document.getElementById('login-box').classList.toggle('hidden'); document.getElementById('signup-box').classList.toggle('hidden'); }
         function logout() { auth.signOut().then(() => location.reload()); }
     </script>
