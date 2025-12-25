@@ -14,154 +14,251 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; overscroll-behavior-y: contain; }
-        .app-gradient { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
-        .input-style { @apply w-full p-4 rounded-2xl bg-slate-100 border-none focus:ring-2 focus:ring-indigo-500 transition-all outline-none text-sm font-semibold; }
-        .quiz-option { @apply w-full p-4 bg-white border-2 border-slate-100 rounded-2xl text-left font-bold text-slate-600 active:scale-95 transition-all mb-3; }
-        .profile-img { @apply w-12 h-12 rounded-full object-cover border-2 border-indigo-100; }
+        
+        :root {
+            --brand-grad: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 50%, #701a75 100%);
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f8fafc;
+            overscroll-behavior-y: contain;
+        }
+
+        .app-card {
+            background: var(--brand-grad);
+            border-radius: 2.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .input-field {
+            @apply w-full p-4 rounded-2xl bg-slate-100 border-none focus:ring-2 focus:ring-indigo-500 outline-none font-semibold text-sm transition-all;
+        }
+
+        .nav-btn { @apply flex flex-col items-center justify-center transition-all; }
+        .nav-active { @apply text-indigo-600 scale-110; }
+        .nav-inactive { @apply text-slate-300; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="text-slate-900">
 
-    <div id="auth-screen" class="min-h-screen flex flex-col items-center justify-center p-6">
-        <div class="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl p-8 border border-slate-100">
+    <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6">
+        <div class="w-full max-w-md bg-white rounded-[3rem] p-8 shadow-2xl border border-slate-100">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 app-card mx-auto mb-4 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white text-3xl"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-tight text-slate-800">ZONE WAGOORA</h1>
+                <p class="text-indigo-600 font-bold text-xs tracking-widest uppercase">Learning Portal</p>
+            </div>
+
             <div id="signup-box" class="hidden space-y-4">
-                <h2 class="text-xl font-black text-center mb-4">Create Account</h2>
-                
-                <div class="flex flex-col items-center mb-4">
-                    <label for="reg-photo" class="cursor-pointer">
-                        <div id="photo-preview" class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center border-2 border-dashed border-slate-300 overflow-hidden">
-                            <i class="fas fa-camera text-slate-400 text-xl"></i>
+                <div class="flex flex-col items-center">
+                    <label for="reg-photo" class="relative group">
+                        <div id="photo-preview" class="w-24 h-24 rounded-full bg-slate-100 border-4 border-indigo-50 flex items-center justify-center overflow-hidden shadow-inner">
+                            <i class="fas fa-camera text-slate-300 text-2xl"></i>
+                        </div>
+                        <div class="absolute bottom-0 right-0 bg-indigo-600 text-white p-2 rounded-full text-xs shadow-lg">
+                            <i class="fas fa-plus"></i>
                         </div>
                     </label>
-                    <input type="file" id="reg-photo" accept="image/*" class="hidden" onchange="previewImage(event)">
-                    <p class="text-[10px] font-bold text-slate-400 mt-2 uppercase">Upload Student Photo</p>
+                    <input type="file" id="reg-photo" accept="image/*" class="hidden" onchange="handlePreview(event)">
                 </div>
-
-                <input type="text" id="reg-name" placeholder="Full Name" class="input-style">
-                <input type="tel" id="reg-whatsapp" placeholder="WhatsApp Number" class="input-style">
-                <input type="text" id="reg-school" placeholder="School Name" class="input-style">
-                <select id="reg-grade" class="input-style font-bold">
+                
+                <input type="text" id="reg-name" placeholder="Full Name" class="input-field">
+                <input type="tel" id="reg-whatsapp" placeholder="WhatsApp Number" class="input-field">
+                <select id="reg-grade" class="input-field">
+                    <option value="">Select Class</option>
                     <option value="1st">Class 1st</option><option value="2nd">Class 2nd</option><option value="3rd">Class 3rd</option>
                     <option value="4th">Class 4th</option><option value="5th">Class 5th</option><option value="6th">Class 6th</option>
                     <option value="7th">Class 7th</option><option value="8th">Class 8th</option>
                 </select>
-                <input type="email" id="reg-email" placeholder="Email" class="input-style">
-                <input type="password" id="reg-pass" placeholder="Password" class="input-style">
-                
-                <button id="reg-btn" onclick="handleSignup()" class="w-full bg-slate-800 text-white font-bold py-4 rounded-2xl shadow-lg">Register & Upload</button>
-                <p class="text-center text-sm text-slate-500">Back to <span onclick="toggleView()" class="text-indigo-600 font-bold cursor-pointer">Login</span></p>
+                <input type="email" id="reg-email" placeholder="Email Address" class="input-field">
+                <input type="password" id="reg-pass" placeholder="Password" class="input-field">
+                <button onclick="handleSignup()" id="reg-btn" class="w-full app-card text-white font-bold py-4 shadow-lg active:scale-95 transition-all">Create Account</button>
+                <p class="text-center text-sm">Have an account? <span onclick="toggleView()" class="text-indigo-600 font-bold cursor-pointer">Login</span></p>
             </div>
-            
+
             <div id="login-box" class="space-y-4">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 app-gradient rounded-3xl mx-auto mb-4 flex items-center justify-center"><i class="fas fa-graduation-cap text-white text-2xl"></i></div>
-                    <h1 class="text-2xl font-black">Zone Wagoora</h1>
-                </div>
-                <input type="email" id="login-email" placeholder="Email" class="input-style">
-                <input type="password" id="login-pass" placeholder="Password" class="input-style">
-                <button onclick="handleLogin()" class="w-full app-gradient text-white font-bold py-4 rounded-2xl shadow-lg">Sign In</button>
-                <p class="text-center text-sm text-slate-500">New? <span onclick="toggleView()" class="text-indigo-600 font-bold cursor-pointer">Register</span></p>
+                <input type="email" id="login-email" placeholder="Email" class="input-field">
+                <input type="password" id="login-pass" placeholder="Password" class="input-field">
+                <button onclick="handleLogin()" class="w-full app-card text-white font-bold py-4 shadow-lg active:scale-95 transition-all">Sign In</button>
+                <p class="text-center text-sm">New student? <span onclick="toggleView()" class="text-indigo-600 font-bold cursor-pointer">Register</span></p>
             </div>
         </div>
     </div>
 
-    <div id="app-dashboard" class="hidden min-h-screen pb-32">
-        <div class="app-gradient p-8 pb-20 rounded-b-[3rem] text-white flex justify-between items-center">
-            <div>
-                <h2 id="user-name" class="text-2xl font-black">Hi!</h2>
-                <p id="user-subtext" class="text-xs opacity-80 uppercase tracking-widest font-bold"></p>
+    <div id="app-dashboard" class="hidden min-h-screen pb-24">
+        <div class="p-6">
+            <div class="app-card p-8 text-white relative overflow-hidden">
+                <div class="flex justify-between items-start z-10 relative">
+                    <div>
+                        <p class="text-indigo-200 text-xs font-bold uppercase tracking-widest mb-1">Welcome Back,</p>
+                        <h2 id="u-name" class="text-3xl font-black">Scholar</h2>
+                        <div class="mt-4 glass rounded-2xl p-4 flex items-center gap-4">
+                            <div class="bg-yellow-400 text-yellow-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase font-bold opacity-70">Total Coins</p>
+                                <p id="u-coins" class="text-xl font-black leading-none">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <img id="u-photo" src="" class="w-20 h-20 rounded-[1.5rem] object-cover border-4 border-white/20 shadow-2xl">
+                </div>
             </div>
-            <img id="user-avatar" src="https://ui-avatars.com/api/?name=User" class="w-16 h-16 rounded-2xl border-4 border-white/20 object-cover shadow-lg">
         </div>
-        
-        <div id="tab-rewards" class="hidden px-6 mt-6">
-            <h3 class="font-black text-slate-800 uppercase text-xs mb-4">Zone Leaderboard</h3>
-            <div id="leaderboard-list" class="space-y-3"></div>
+
+        <div class="px-6 space-y-6">
+            <div id="view-home" class="space-y-4">
+                <h3 class="font-black text-slate-400 text-xs uppercase tracking-widest">Active Lessons</h3>
+                <div id="subject-list" class="grid grid-cols-2 gap-4"></div>
+            </div>
+
+            <div id="view-leader" class="hidden space-y-4">
+                <h3 class="font-black text-slate-400 text-xs uppercase tracking-widest text-center">Zone Leaderboard</h3>
+                <div id="rank-list" class="space-y-3"></div>
+            </div>
         </div>
+
+        <nav class="fixed bottom-6 left-6 right-6 h-20 bg-white shadow-2xl rounded-[2rem] flex justify-around items-center px-4 border border-slate-100">
+            <button onclick="switchTab('home')" id="n-home" class="nav-btn nav-active"><i class="fas fa-th-large text-xl"></i><span class="text-[10px] font-bold mt-1">Study</span></button>
+            <button onclick="switchTab('leader')" id="n-leader" class="nav-btn nav-inactive"><i class="fas fa-trophy text-xl"></i><span class="text-[10px] font-bold mt-1">Ranks</span></button>
+            <button onclick="logout()" class="nav-btn text-red-400"><i class="fas fa-power-off text-xl"></i><span class="text-[10px] font-bold mt-1">Exit</span></button>
+        </nav>
     </div>
 
     <script>
-        // Use your existing firebaseConfig here
         const firebaseConfig = {
-            apiKey: "AIzaSyBcRfUj9N_9LaVuEuIT7d0ueJ88heyP9hI",
-            authDomain: "wagoora-edu-portal.firebaseapp.com",
-            projectId: "wagoora-edu-portal",
-            storageBucket: "wagoora-edu-portal.appspot.com", // Ensure this matches Storage tab
-            messagingSenderId: "476444772096",
-            appId: "1:476444772096:web:6fd360cc0a774f94a1d5e5"
+            apiKey: "AIzaSyCBLLmzxVYuivT15HBPPSxMoS2OzojRgJM",
+            authDomain: "wap-ps-pethgam.firebaseapp.com",
+            databaseURL: "https://wap-ps-pethgam-default-rtdb.firebaseio.com",
+            projectId: "wap-ps-pethgam",
+            storageBucket: "wap-ps-pethgam.firebasestorage.app",
+            messagingSenderId: "430925411362",
+            appId: "1:430925411362:web:22857dee585d02fc54467b"
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        const storage = firebase.storage();
 
-        function previewImage(event) {
-            const preview = document.getElementById('photo-preview');
-            preview.innerHTML = `<img src="${URL.createObjectURL(event.target.files[0])}" class="w-full h-full object-cover">`;
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        let userProfile = null;
+
+        function handlePreview(e) {
+            const file = e.target.files[0];
+            if(file) document.getElementById('photo-preview').innerHTML = `<img src="${URL.createObjectURL(file)}" class="w-full h-full object-cover">`;
         }
 
         async function handleSignup() {
             const btn = document.getElementById('reg-btn');
             const file = document.getElementById('reg-photo').files[0];
-            if(!file) return alert("Please upload a student photo first.");
-            
-            btn.innerText = "Uploading Photo...";
-            btn.disabled = true;
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-pass').value;
+
+            if(!file || !name) return alert("Photo and Name are required!");
+
+            btn.disabled = true; btn.innerText = "Creating Account...";
 
             try {
-                // 1. Create User
-                const email = document.getElementById('reg-email').value;
-                const pass = document.getElementById('reg-pass').value;
                 const cred = await auth.createUserWithEmailAndPassword(email, pass);
+                const ref = storage.ref(`users/${cred.user.uid}`);
+                await ref.put(file);
+                const url = await ref.getDownloadURL();
 
-                // 2. Upload Photo
-                const storageRef = storage.ref(`profile_pics/${cred.user.uid}`);
-                await storageRef.put(file);
-                const photoURL = await storageRef.getDownloadURL();
-
-                // 3. Save Data
                 await db.collection("users").doc(cred.user.uid).set({
                     uid: cred.user.uid,
-                    fullName: document.getElementById('reg-name').value,
+                    fullName: name,
                     whatsapp: document.getElementById('reg-whatsapp').value,
-                    school: document.getElementById('reg-school').value,
                     grade: document.getElementById('reg-grade').value,
-                    photoURL: photoURL,
-                    coins: 0, completed: [], approved: false, role: 'student'
+                    photo: url,
+                    coins: 0,
+                    completed: [],
+                    approved: false,
+                    role: 'student'
                 });
 
-                alert("Success! Awaiting HOI approval.");
+                alert("Account Ready! Awaiting Teacher Approval.");
                 location.reload();
-            } catch (e) { alert(e.message); btn.disabled = false; btn.innerText = "Register"; }
+            } catch (e) { alert(e.message); btn.disabled = false; btn.innerText = "Create Account"; }
         }
 
-        // Leaderboard Update to show images
-        async function fetchLeaderboard() {
-            const list = document.getElementById('leaderboard-list');
-            list.innerHTML = 'Loading scholars...';
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            try {
+                const cred = await auth.signInWithEmailAndPassword(email, pass);
+                const doc = await db.collection("users").doc(cred.user.uid).get();
+                userProfile = doc.data();
+                if(!userProfile.approved) { alert("Admin Approval Pending."); auth.signOut(); return; }
+                initApp();
+            } catch (e) { alert(e.message); }
+        }
+
+        function initApp() {
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('app-dashboard').classList.remove('hidden');
+            document.getElementById('u-name').innerText = userProfile.fullName.split(' ')[0];
+            document.getElementById('u-coins').innerText = userProfile.coins;
+            document.getElementById('u-photo').src = userProfile.photo;
+            renderSubjects();
+        }
+
+        function renderSubjects() {
+            const subs = ["English", "Math", "Science", "Urdu", "Kashmiri", "EVS", "S.St"];
+            const grid = document.getElementById('subject-list');
+            grid.innerHTML = subs.map(s => `
+                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-3"><i class="fas fa-book"></i></div>
+                    <span class="font-bold text-xs">${s}</span>
+                </div>
+            `).join('');
+        }
+
+        async function fetchRanks() {
+            const list = document.getElementById('rank-list');
+            list.innerHTML = "Fetching...";
             const snap = await db.collection("users").where("role","==","student").orderBy("coins","desc").limit(10).get();
-            list.innerHTML = '';
+            list.innerHTML = "";
             snap.forEach((doc, i) => {
                 const u = doc.data();
-                const d = document.createElement('div');
-                d.className = "flex justify-between items-center p-4 bg-white rounded-2xl shadow-sm border border-slate-100";
-                d.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <b class="text-slate-400 w-4">${i+1}</b>
-                        <img src="${u.photoURL || 'https://ui-avatars.com/api/?name='+u.fullName}" class="w-10 h-10 rounded-full object-cover">
-                        <div>
-                            <p class="font-bold text-sm">${u.fullName}</p>
-                            <p class="text-[8px] opacity-50 uppercase">${u.school}</p>
+                list.innerHTML += `
+                    <div class="flex items-center justify-between p-4 bg-white rounded-3xl border border-slate-50">
+                        <div class="flex items-center gap-4">
+                            <span class="font-black text-slate-300 w-4">${i+1}</span>
+                            <img src="${u.photo}" class="w-12 h-12 rounded-2xl object-cover shadow-md">
+                            <div>
+                                <p class="font-bold text-sm text-slate-800">${u.fullName}</p>
+                                <p class="text-[10px] text-indigo-500 font-bold uppercase">${u.grade}</p>
+                            </div>
                         </div>
+                        <div class="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-2xl font-black text-sm">${u.coins}</div>
                     </div>
-                    <b class="text-indigo-600">${u.coins}</b>
                 `;
-                list.appendChild(d);
             });
         }
-        
-        // Ensure to call updateDashboardUI() after login to set document.getElementById('user-avatar').src = currentUser.photoURL;
+
+        function switchTab(t) {
+            ['home', 'leader'].forEach(v => document.getElementById('view-'+v).classList.add('hidden'));
+            ['n-home', 'n-leader'].forEach(n => document.getElementById(n).classList.replace('nav-active', 'nav-inactive'));
+            document.getElementById('view-'+t).classList.remove('hidden');
+            document.getElementById('n-'+t).classList.replace('nav-inactive', 'nav-active');
+            if(t === 'leader') fetchRanks();
+        }
+
+        function toggleView() { document.getElementById('login-box').classList.toggle('hidden'); document.getElementById('signup-box').classList.toggle('hidden'); }
+        function logout() { auth.signOut().then(() => location.reload()); }
     </script>
 </body>
 </html>
